@@ -1,0 +1,5 @@
+netlify
+-https://unique-dolphin-250a69.netlify.app/
+
+amplify
+-https://main.d2g8gx7aiu8qg4.amplifyapp.com/
