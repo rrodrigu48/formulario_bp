@@ -224,7 +224,7 @@ const Formulario = () =>{
             <h1 className='text-center'>Listado de Cliente</h1>
             <hr/>
             <div className='row'>
-                <div className="col-12 col-lg-8">
+                <div className="col-12 col-xl-8">
                     <h4 className="text-center">
                         Tabla Clientes
                     </h4>
@@ -251,13 +251,19 @@ const Formulario = () =>{
                                     <td>{item.edadCliente}</td>
                                     <td>{item.emailCliente}</td>
                                     <td>{item.sexoCliente}</td>
+                                    <td>
+                                        <button className='btn btn-danger btn-sm float-end mx-2' onClick={()=> eliminar(item.id)}>Eliminar</button>
+                                    </td>
+                                    <td>
+                                        <button className='btn btn-warning btn-sm float-end' onClick={()=> auxEditar(item)}>editar</button>
+                                    </td>
                                 </tr>
                             ))
                         }  
                         </tbody>
                     </table>
                 </div>
-                <div className="col-12 col-lg-4">
+                <div className="col-12 col-xl-4">
                     <h4 className="text-center">
                     {
                         modoEdicion ? 'Editar Cliente': 'Agregar Cliente'
@@ -266,58 +272,76 @@ const Formulario = () =>{
                         {
                             error ? <span className='text-danger'>{error}</span> : null
                         }
-                        <input
-                            className='form-control mb-2'
-                            type="text"
-                            placeholder='Ingrese Nombre'
-                            onChange={(e)=> {setCliente({ ...cliente, nombre: e.target.value })
-                            console.log(cliente)
-                        }}
-                            value={cliente.nombre}
-                        />
-                        <input
-                            className='form-control mb-2'
-                            type="text"
-                            placeholder='Ingrese apellido'
-                            onChange={(e)=>setCliente({ ...cliente, apellido: e.target.value })}
-                            value={cliente.apellido}
-                        />
-                         <input
-                            className='form-control mb-2'
-                            type="text"
-                            placeholder='Ingrese direccion'
-                            onChange={(e)=>setCliente({ ...cliente, direccion: e.target.value })}
-                            value={cliente.direccion}
-                        />
-                         <input
-                            className='form-control mb-2'
-                            type="text"
-                            placeholder='Ingrese telefono'
-                            onChange={(e)=>setCliente({ ...cliente, telefono: e.target.value })}
-                            value={cliente.telefono}
-                        />
-                         <input
-                            className='form-control mb-2'
-                            type="email"
-                            placeholder='Ingrese email'
-                            onChange={(e)=>setCliente({ ...cliente, email: e.target.value })}
-                            value={cliente.email}
-                        />
-                         <input
-                            className='form-control mb-2'
-                            type="text"
-                            placeholder='Ingrese edad'
-                            onChange={(e)=>setCliente({ ...cliente, edad: e.target.value })}
-                            value={cliente.edad}
-                        />
-                         <input
-                            className='form-control mb-2'
-                            type="text"
-                            placeholder='Ingrese sexo'
-                            onChange={(e)=>setCliente({ ...cliente, sexo: e.target.value })}
-                            value={cliente.sexo}
-                        />
-                         
+                        <div className="form-floating mb-3">
+                            <input 
+                                type="text" 
+                                className="form-control" 
+                                placeholder="Ingrese Nombre"
+                                onChange={(e)=> setCliente({ ...cliente, nombre: e.target.value })}
+                                value={cliente.nombre}
+                            />
+                            <label>Nombre</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input 
+                                type="text" 
+                                className="form-control" 
+                                placeholder="Ingrese Apellido"
+                                onChange={(e)=> setCliente({ ...cliente, apellido: e.target.value })}
+                                value={cliente.apellido}
+                            />
+                            <label>Apellido</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input 
+                                type="text" 
+                                className="form-control" 
+                                placeholder="Ingrese Direccion"
+                                onChange={(e)=> setCliente({ ...cliente, direccion: e.target.value })}
+                                value={cliente.direccion}
+                            />
+                            <label>Direccion</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input 
+                                type="text" 
+                                className="form-control" 
+                                placeholder="Ingrese Telefono"
+                                onChange={(e)=> setCliente({ ...cliente, telefono: e.target.value })}
+                                value={cliente.telefono}
+                            />
+                            <label>Telefono</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input 
+                                type="text" 
+                                className="form-control" 
+                                placeholder="Ingrese Edad"
+                                onChange={(e)=> setCliente({ ...cliente, edad: e.target.value })}
+                                value={cliente.edad}
+                            />
+                            <label>Edad</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input 
+                                type="email" 
+                                className="form-control" 
+                                placeholder="Ingrese Email"
+                                onChange={(e)=> setCliente({ ...cliente, email: e.target.value })}
+                                value={cliente.email}
+                            />
+                            <label>Email</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input 
+                                type="text" 
+                                className="form-control" 
+                                placeholder="Ingrese Sexo"
+                                onChange={(e)=> setCliente({ ...cliente, sexo: e.target.value })}
+                                value={cliente.sexo}
+                            />
+                            <label>Sexo</label>
+                        </div>   
                         {
                             !modoEdicion? (
                                 <button className='btn btn-primary btn-block' type='submit'>Agregar</button>
