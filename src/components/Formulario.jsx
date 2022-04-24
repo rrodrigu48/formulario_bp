@@ -1,27 +1,39 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {firebase} from '../firebase'
 import {nanoid} from 'nanoid'
 
 const Formulario = () =>{
-    const[fruta, setFruta] = React.useState('')
-    const [descripcion, setDescripcion ] = React.useState('')
-    const [lista, setLista] = React.useState([])
-    const [modoEdicion, setModoEdicion] = React.useState(false)
-    const [id, setId] = React.useState('')
-    const [error, setError] = React.useState(null)
+    const [lista, setLista] = useState([])
+    const [modoEdicion, setModoEdicion] = useState(false)
+    const [id, setId] = useState('')
+    const [error, setError] = useState(null)
 
-    React.useEffect(()=>{
+    // cliente
+    const [cliente, setCliente] = useState(
+        {
+            nombre: '',
+            apellido: '',
+            direccion: '',
+            telefono: '',
+            edad: '',
+            email: '',
+            sexo: '',
+        }
+    );
+
+
+    useEffect(()=>{
         const obtenerDatos = async () =>{
             try{
                 const db = firebase.firestore()
-                const data = await db.collection('frutas').get()
+                //const data = await db.collection('frutas').get()
+                const data = await db.collection('clientes').get()
                 const array = data.docs.map(item =>(
                     {
                         id:item.id, ...item.data()
                     }
                 ))
                 setLista(array)
-
             }catch(error){
                 console.log(error)
             }
@@ -33,40 +45,76 @@ const Formulario = () =>{
     const guardarDatos = async (e) =>{
         e.preventDefault()
 
-        if(!fruta.trim()){
-            setError('Campo fruta vacío')
+        if(!cliente.nombre.trim()){
+            setError('Campo nombre vacío')
             return
         }
 
-        if(!descripcion.trim()){
-            setError('Campo descripción vacío')
+        if(!cliente.apellido.trim()){
+            setError('Campo apellido vacío')
+            return
+        }
+
+        if(!cliente.direccion.trim()){
+            setError('Campo direccion vacío')
+            return
+        }
+        if(!cliente.telefono.trim()){
+            setError('Campo telefono vacío')
+            return
+        }
+        if(!cliente.edad.trim()){
+            setError('Campo edad vacío')
+            return
+        }
+        if(!cliente.email.trim()){
+            setError('Campo email vacío')
+            return
+        }
+        if(!cliente.sexo.trim()){
+            setError('Campo sexo vacío')
             return
         }
         try{
             const db = firebase.firestore()
-            const nuevaFruta = {
-                nombreFruta:fruta,
-                nombreDescripcion:descripcion
+            const nuevoCliente = {
+                nombreCliente: cliente.nombre,
+                apellidoCliente: cliente.apellido,
+                direccionCliente: cliente.direccion,
+                telefonoCliente: cliente.telefono,
+                edadCliente: cliente.edad,
+                emailCliente: cliente.email,
+                sexoCliente: cliente.sexo
             }
-            await db.collection('frutas').add(nuevaFruta)
+            await db.collection('clientes').add(nuevoCliente)
             setLista([...lista,
-                {id:nanoid(), nombreFruta: fruta, nombreDescripcion: descripcion}
+                {id:nanoid(), nombreCliente: cliente.nombre, apellidoCliente: cliente.apellido, direccionCliente: cliente.direccion, telefonoCliente: cliente.telefono, edadCliente: cliente.edad, emailCliente: cliente.email, sexoCliente: cliente.sexo}
             ])
+
         }catch(error){
             console.log(error)
         }
 
         setModoEdicion(false)
-        setFruta('')
-        setDescripcion('')
         setError(null)
+        setCliente(
+            {
+                nombre: '',
+                apellido: '',
+                direccion: '',
+                telefono: '',
+                edad: '',
+                email: '',
+                sexo: '',
+            }
+        )
         
     }
 
     const eliminar= async (id) =>{
         try{
             const db = firebase.firestore()
-            await db.collection('frutas').doc(id).delete()
+            await db.collection('clientes').doc(id).delete()
             const aux = lista.filter(item => item.id !== id)
             setLista(aux)
         }catch(error){
@@ -75,71 +123,144 @@ const Formulario = () =>{
     }
 
     const auxEditar = (item) =>{
-        setFruta(item.nombreFruta)
-        setDescripcion(item.nombreDescripcion)
+        setCliente(
+            {
+                nombre: item.nombreCliente,
+                apellido: item.apellidoCliente,
+                direccion: item.direccionCliente,
+                telefono: item.telefonoCliente,
+                edad: item.edadCliente,
+                email: item.emailCliente,
+                sexo: item.sexoCliente,
+            }
+        )
         setModoEdicion(true)
         setId(item.id)
     }
 
     const editar = async e =>{
         e.preventDefault()
-        if(!fruta.trim()){
-            setError('Campo fruta vacío')
+        if(!cliente.nombre.trim()){
+            setError('Campo nombre vacío')
             return
         }
 
-        if(!descripcion.trim()){
-            setError('Campo descripción vacío')
+        if(!cliente.apellido.trim()){
+            setError('Campo apellido vacío')
+            return
+        }
+
+        if(!cliente.direccion.trim()){
+            setError('Campo direccion vacío')
+            return
+        }
+        if(!cliente.telefono.trim()){
+            setError('Campo telefono vacío')
+            return
+        }
+        if(!cliente.edad.trim()){
+            setError('Campo edad vacío')
+            return
+        }
+        if(!cliente.email.trim()){
+            setError('Campo email vacío')
+            return
+        }
+        if(!cliente.sexo.trim()){
+            setError('Campo sexo vacío')
             return
         }
         try{
             const db= firebase.firestore()
-            await db.collection('frutas').doc(id).update({
-                nombreFruta:fruta,
-                nombreDescripcion:descripcion
+            await db.collection('clientes').doc(id).update({
+                nombreCliente: cliente.nombre,
+                apellidoCliente: cliente.apellido,
+                direccionCliente: cliente.direccion,
+                telefonoCliente: cliente.telefono,
+                edadCliente: cliente.edad,
+                emailCliente: cliente.email,
+                sexoCliente: cliente.sexo
             })
 
            
         }catch(error){
             console.log(error)
         }
-        setFruta('')
-        setDescripcion('')
+
+        setCliente(
+            {
+                nombre: '',
+                apellido: '',
+                direccion: '',
+                telefono: '',
+                edad: '',
+                email: '',
+                sexo: '',
+            }
+        )
         setModoEdicion(false)
         setError(null)
 
     }
 
     const cancelar =()=>{
-        setFruta('')
-        setDescripcion('')
+        setCliente(
+            {
+                nombre: '',
+                apellido: '',
+                direccion: '',
+                telefono: '',
+                edad: '',
+                email: '',
+                sexo: '',
+            }
+        )
         setModoEdicion(false)
         setError(null)
     }
 
     return (
         <div className='container mt-5'>
-            <h1 className='text-center'>CRUD BÁSICO REACT</h1>
+            <h1 className='text-center'>Listado de Cliente</h1>
             <hr/>
             <div className='row'>
-                <div className="col-8">
-                    <h4 className="text-center">Listado de frutas</h4>
-                    <ul className="list-group">
-                    {
-                        lista.map((item)=>(
-                            <li className='list-group-item' key={item.id}>
-                                <span className='lead'>{item.nombreFruta} - {item.nombreDescripcion}</span>
-                                <button className='btn btn-danger btn-sm float-end mx-2' onClick={()=> eliminar(item.id)}>Eliminar</button>
-                                <button className='btn btn-warning btn-sm float-end' onClick={()=> auxEditar(item)}>editar</button>
-                            </li>
-                        ))
-                    }
-                    </ul>
+                <div className="col-12 col-lg-8">
+                    <h4 className="text-center">
+                        Tabla Clientes
+                    </h4>
+                    <table className='table table-striped'>
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellido</th>
+                                <th scope="col">Direccion</th>
+                                <th scope="col">Telefono</th>
+                                <th scope="col">Edad</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Sexo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            lista.map((item)=>(
+                                <tr key={item.id}>
+                                    <td>{item.nombreCliente}</td>
+                                    <td>{item.apellidoCliente}</td>
+                                    <td>{item.direccionCliente}</td>
+                                    <td>{item.telefonoCliente}</td>
+                                    <td>{item.edadCliente}</td>
+                                    <td>{item.emailCliente}</td>
+                                    <td>{item.sexoCliente}</td>
+                                </tr>
+                            ))
+                        }  
+                        </tbody>
+                    </table>
                 </div>
-                <div className="col-4">
+                <div className="col-12 col-lg-4">
                     <h4 className="text-center">
                     {
-                        modoEdicion ? 'Editar Frutas': 'Agregar Frutas'
+                        modoEdicion ? 'Editar Cliente': 'Agregar Cliente'
                     }</h4>
                     <form onSubmit={modoEdicion ? editar: guardarDatos}>
                         {
@@ -148,17 +269,56 @@ const Formulario = () =>{
                         <input
                             className='form-control mb-2'
                             type="text"
-                            placeholder='Ingrese Frutra'
-                            onChange={(e)=>setFruta(e.target.value)}
-                            value = {fruta}
+                            placeholder='Ingrese Nombre'
+                            onChange={(e)=> {setCliente({ ...cliente, nombre: e.target.value })
+                            console.log(cliente)
+                        }}
+                            value={cliente.nombre}
                         />
                         <input
                             className='form-control mb-2'
                             type="text"
-                            placeholder='Ingrese Descripción'
-                            onChange={(e)=>setDescripcion(e.target.value)}
-                            value = {descripcion}
-                        />{
+                            placeholder='Ingrese apellido'
+                            onChange={(e)=>setCliente({ ...cliente, apellido: e.target.value })}
+                            value={cliente.apellido}
+                        />
+                         <input
+                            className='form-control mb-2'
+                            type="text"
+                            placeholder='Ingrese direccion'
+                            onChange={(e)=>setCliente({ ...cliente, direccion: e.target.value })}
+                            value={cliente.direccion}
+                        />
+                         <input
+                            className='form-control mb-2'
+                            type="text"
+                            placeholder='Ingrese telefono'
+                            onChange={(e)=>setCliente({ ...cliente, telefono: e.target.value })}
+                            value={cliente.telefono}
+                        />
+                         <input
+                            className='form-control mb-2'
+                            type="email"
+                            placeholder='Ingrese email'
+                            onChange={(e)=>setCliente({ ...cliente, email: e.target.value })}
+                            value={cliente.email}
+                        />
+                         <input
+                            className='form-control mb-2'
+                            type="text"
+                            placeholder='Ingrese edad'
+                            onChange={(e)=>setCliente({ ...cliente, edad: e.target.value })}
+                            value={cliente.edad}
+                        />
+                         <input
+                            className='form-control mb-2'
+                            type="text"
+                            placeholder='Ingrese sexo'
+                            onChange={(e)=>setCliente({ ...cliente, sexo: e.target.value })}
+                            value={cliente.sexo}
+                        />
+                         
+                        {
                             !modoEdicion? (
                                 <button className='btn btn-primary btn-block' type='submit'>Agregar</button>
                             )
